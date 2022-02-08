@@ -1,6 +1,6 @@
 # Borrowing the latest-sidecar image to extract the datacollector binaries
 FROM lacework/datacollector:latest-sidecar AS lacework
-RUN cp /var/lib/lacework-backup/*/datacollector-musl > datacollector_alpine
+RUN cp /var/lib/lacework-backup/*/datacollector-musl /datacollector_alpine
 
 # Build a fresh alpine image
 FROM alpine:latest
