@@ -1,0 +1,19 @@
+# Borrowing the latest-sidecar image to extract the datacollector binaries
+FROM lacework/datacollector:latest-sidecar AS lacework
+RUN cp /var/lib/lacework-backup/*/datacollector-musl > datacollector_alpine
+
+# Build a fresh alpine image
+FROM alpine:latest
+
+# Add SSL certs
+RUN apk -U --no-cache add ca-certificates
+RUN rm -rf /var/cache/apk/*
+
+# Prep and copy lacework agent
+RUN mkdir -p /var/log/lacework /var/lib/lacework/config
+COPY --from=lacework /datacollector_alpine /var/lib/lacework/datacollector
+RUN chmod +x /var/lib/lacework/datacollector
+
+# Copy entrypoint script
+COPY examplecorp-entrypoint.sh /examplecorp-entrypoint.sh
+RUN chmod +x /examplecorp-entrypoint.sh

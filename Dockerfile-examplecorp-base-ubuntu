@@ -1,0 +1,22 @@
+# Borrowing the latest-sidecar image to extract the datacollector binaries
+FROM lacework/datacollector:latest-sidecar AS lacework
+RUN cp /var/lib/lacework-backup/*/datacollector > datacollector_linux
+
+# Build a fresh ubuntu image
+FROM ubuntu:latest
+
+# Add SSL certs
+RUN apt-get update
+RUN apt-get install -y ca-certificates
+RUN rm -rf /var/lib/apt/lists/*
+
+# Prep and copy lacework agent
+RUN mkdir -p /var/log/lacework /var/lib/lacework/config
+COPY --from=lacework /datacollector_linux /var/lib/lacework/datacollector
+RUN chmod +x /var/lib/lacework/datacollector
+
+# Copy entrypoint script
+COPY examplecorp-entrypoint.sh /examplecorp-entrypoint.sh
+RUN chmod +x /examplecorp-entrypoint.sh
+
+
