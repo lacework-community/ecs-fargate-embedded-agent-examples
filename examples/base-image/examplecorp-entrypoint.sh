@@ -3,7 +3,9 @@
 #
 # Environment Variables:
 # LaceworkAccessToken="..."      (Required)
-# LaceworkDebug="true"           (Optional, will tail datacollector.log)
+# LaceworkLogStdout="true"       (Optional, will tail datacollector.log)
+
+echo "Setting up Lacework Agent"
 
 # Check for Access Token
 if [ -z "$LaceworkAccessToken" ]; then
@@ -15,13 +17,6 @@ fi
 echo "Writing Lacework datacollector config file to /var/lib/lacework/config/config.json"
 LW_CONFIG="{\"tokens\": {\"accesstoken\": \"${LaceworkAccessToken}\"}}"
 echo $LW_CONFIG > /var/lib/lacework/config/config.json
-
-# Optional debug logging
-if [ "$LaceworkDebug" = "true" ]; then
-  echo "Debug mode: tailing /var/log/lacework/datacollector.log"
-  touch /var/log/lacework/datacollector.log
-  tail -f /var/log/lacework/datacollector.log &
-fi
 
 # Start datacollector
 /var/lib/lacework/datacollector &
