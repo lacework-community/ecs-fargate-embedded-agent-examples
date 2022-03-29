@@ -19,4 +19,5 @@ RUN chmod +x /var/lib/lacework/datacollector
 COPY examplecorp-entrypoint.sh /examplecorp-entrypoint.sh
 RUN chmod +x /examplecorp-entrypoint.sh
 
-
+# ENTRYPOINT will carry over to downstream containers (unless they specify their own ENTRYPOINT)
+ENTRYPOINT ["/examplecorp-entrypoint.sh"]

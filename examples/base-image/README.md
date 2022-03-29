@@ -36,3 +36,17 @@ This example has two main differences from the public nginx Dockerfile:
 
 1. It is built from a (fictional) secure baseline image which would have been built by one of the above example Dockerfiles.
 1. The `ENTRYPOINT` has been prepended with our `examplecorp-entrypoint.sh` which starts the Lacework agent
+
+
+## Directions To Test
+
+To test if the base entrypoint (with Lacework agent) is excecuting, you can run these test commands
+
+```
+cd examples/base-image
+docker build . -f Dockerfile-examplecorp-base-alpine -t examplecorp-base-alpine
+docker build . -f Dockerfile-examplecorp-nginx -t examplecorp-nginx
+docker run -i examplecorp-nginx
+Please set the LaceworkAccessToken environment variable
+[container terminates]
+```

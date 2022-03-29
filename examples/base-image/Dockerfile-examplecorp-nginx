@@ -9,5 +9,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-entrypoint.sh /nginx-entrypoint.sh
 RUN chmod +x /nginx-entrypoint.sh
 
-ENTRYPOINT ["/examplecorp-entrypoint.sh", "nginx-entrypoint.sh"]
+# If your workload container requires ENTRYPOINT, prepend it with your base entrypoint
+# Example:
+# ENTRYPOINT ["/examplecorp-entrypoint.sh", "nginx-entrypoint.sh"]
+
 CMD ["nginx", "-g", "daemon off;"]
